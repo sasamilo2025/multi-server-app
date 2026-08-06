@@ -37,6 +37,10 @@ app.get("/", (req, res) => {
         <h1>🚀 Model 5 - Exercise 1</h1>
         <h2>Express Server Running Successfully!</h2>
         <p>Status: 🟢 ONLINE</p>
+        <p>Version: ${VERSION}</p>
+         <small>
+           (Local demo - Express server must be running)
+        </small>
     `);
 
 });
