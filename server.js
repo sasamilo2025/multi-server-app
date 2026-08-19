@@ -12,6 +12,9 @@ const express = require("express");
 // Create an Express application
 const app = express();
 
+// Serve static files from the public folder
+app.use(express.static("public"));
+
 // ------------------------------------------------------
 // Server Configuration
 // ------------------------------------------------------
@@ -42,6 +45,23 @@ app.get("/", (req, res) => {
            (Local demo - Express server must be running)
         </small>
     `);
+
+});
+
+// ------------------------------------------------------
+// Calculator API Route
+// ------------------------------------------------------
+
+app.get("/calculator/add", (req, res) => {
+
+    const num1 = Number(req.query.num1);
+    const num2 = Number(req.query.num2);
+
+    const result = num1 + num2;
+
+    res.json({
+        result: result
+    });
 
 });
 
