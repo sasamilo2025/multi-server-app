@@ -49,17 +49,147 @@ app.get("/", (req, res) => {
 });
 
 // ------------------------------------------------------
-// Calculator API Route
+// Calculator API - Addition
 // ------------------------------------------------------
 
 app.get("/calculator/add", (req, res) => {
 
+    // Read the two numbers from the URL query parameters.
     const num1 = Number(req.query.num1);
     const num2 = Number(req.query.num2);
 
+    // Validate missing or invalid numbers.
+    if (
+        req.query.num1 === undefined ||
+        req.query.num2 === undefined ||
+        !Number.isFinite(num1) ||
+        !Number.isFinite(num2)
+    ) {
+        return res.status(400).json({
+            error: "Please provide two valid numbers."
+        });
+    }
+
+    // Perform addition.
     const result = num1 + num2;
 
+    // Return the result as JSON.
     res.json({
+        operation: "addition",
+        num1: num1,
+        num2: num2,
+        result: result
+    });
+
+});
+
+// ------------------------------------------------------
+// Calculator API - Subtraction
+// ------------------------------------------------------
+
+app.get("/calculator/subtract", (req, res) => {
+
+    // Read both numbers from the URL query parameters.
+    const num1 = Number(req.query.num1);
+    const num2 = Number(req.query.num2);
+
+    // Validate missing or invalid input.
+    if (
+        req.query.num1 === undefined ||
+        req.query.num2 === undefined ||
+        !Number.isFinite(num1) ||
+        !Number.isFinite(num2)
+    ) {
+        return res.status(400).json({
+            error: "Please provide two valid numbers."
+        });
+    }
+
+    // Perform subtraction.
+    const result = num1 - num2;
+
+    // Return the calculation result as JSON.
+    res.json({
+        operation: "subtraction",
+        num1: num1,
+        num2: num2,
+        result: result
+    });
+
+});
+
+// ------------------------------------------------------
+// Calculator API - Multiplication
+// ------------------------------------------------------
+
+app.get("/calculator/multiply", (req, res) => {
+
+    // Read the numbers from the URL query parameters.
+    const num1 = Number(req.query.num1);
+    const num2 = Number(req.query.num2);
+
+    // Check for missing or invalid numbers.
+    if (
+        req.query.num1 === undefined ||
+        req.query.num2 === undefined ||
+        !Number.isFinite(num1) ||
+        !Number.isFinite(num2)
+    ) {
+        return res.status(400).json({
+            error: "Please provide two valid numbers."
+        });
+    }
+
+    // Multiply the two numbers.
+    const result = num1 * num2;
+
+    // Return the result as JSON.
+    res.json({
+        operation: "multiplication",
+        num1: num1,
+        num2: num2,
+        result: result
+    });
+
+});
+
+// ------------------------------------------------------
+// Calculator API - Division
+// ------------------------------------------------------
+
+app.get("/calculator/divide", (req, res) => {
+
+    // Read both numbers from the URL query parameters.
+    const num1 = Number(req.query.num1);
+    const num2 = Number(req.query.num2);
+
+    // Validate missing or invalid numbers.
+    if (
+        req.query.num1 === undefined ||
+        req.query.num2 === undefined ||
+        !Number.isFinite(num1) ||
+        !Number.isFinite(num2)
+    ) {
+        return res.status(400).json({
+            error: "Please provide two valid numbers."
+        });
+    }
+
+    // Prevent division by zero.
+    if (num2 === 0) {
+        return res.status(400).json({
+            error: "Division by zero is not allowed."
+        });
+    }
+
+    // Perform division.
+    const result = num1 / num2;
+
+    // Return the result as JSON.
+    res.json({
+        operation: "division",
+        num1: num1,
+        num2: num2,
         result: result
     });
 

@@ -1,20 +1,159 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>Calculator Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Module 5 - Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f6fc;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .calculator {
+            background-color: white;
+            max-width: 420px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 18px;
+            margin: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
-<div>Result
-<span id="result"></span>
-</div>
+
+    <div class="calculator">
+
+        <h1>🧮 Calculator</h1>
+
+        <p>Module 5 - Exercise 3</p>
+
+        <!-- First number -->
+        <input
+            type="number"
+            id="num1"
+            placeholder="Enter first number"
+            step="any"
+        >
+
+        <!-- Second number -->
+        <input
+            type="number"
+            id="num2"
+            placeholder="Enter second number"
+            step="any"
+        >
+
+        <h3>Select Operation</h3>
+
+        <!-- Calculator operation buttons -->
+        <button onclick="calculate('add')">+</button>
+        <button onclick="calculate('subtract')">−</button>
+        <button onclick="calculate('multiply')">×</button>
+        <button onclick="calculate('divide')">÷</button>
+
+        <!-- Calculation result -->
+        <div id="result" role="status" aria-live="polite">
+            Result will appear here.
+        </div>
+
+    </div>
+
+    <script>
+
+        // Send the selected calculation to our Express API.
+        async function calculate(operation) {
+
+            // Read the input values as strings.
+            const num1 = document.getElementById("num1").value.trim();
+            const num2 = document.getElementById("num2").value.trim();
+
+            const resultElement = document.getElementById("result");
+
+            // Reject empty inputs before contacting the server.
+            if (num1 === "" || num2 === "") {
+                resultElement.textContent =
+                    "⚠️ Please enter both numbers.";
+                return;
+            }
+
+            // Check that both inputs contain valid finite numbers.
+            if (!Number.isFinite(Number(num1)) ||
+                !Number.isFinite(Number(num2))) {
+
+                resultElement.textContent =
+                    "⚠️ Please enter valid numbers.";
+                return;
+            }
+
+            try {
+
+                // Construct the API request.
+                const url =
+                    `/calculator/${operation}?num1=${encodeURIComponent(num1)}&num2=${encodeURIComponent(num2)}`;
+
+                // Send the request to Express.
+                const response = await fetch(url);
+
+                // Read the JSON response.
+                const data = await response.json();
+
+                // Display any error returned by Express.
+                if (!response.ok) {
+                    resultElement.textContent =
+                        `⚠️ ${data.error || "Calculation failed."}`;
+                    return;
+                }
+
+                // Display the successful result.
+                resultElement.textContent =
+                    `✅ Result: ${data.result}`;
+
+            } catch (error) {
+
+                // Handle network or server connection problems.
+                resultElement.textContent =
+                    "❌ Unable to connect to the calculator server.";
+
+                console.error("Calculator error:", error);
+            }
+        }
+
+    </script>
+
 </body>
-<script>
-let num1 = 2;
-let num2 = 4;
-fetch(`/calculator/add?num1=${num1}&num2=${num2}`)
-.then(response => response.json())
-.then(data => {
-document.getElementById("result").innerHTML = 
-data.result;      
-})
-</script>
-</html
+</html>
